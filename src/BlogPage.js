@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { API_URL, BACKEND_URL } from "./constants/apiUrl";
 
 const BlogPage = () => {
   let token = localStorage.getItem("token");
@@ -28,7 +29,7 @@ const BlogPage = () => {
     };
 
     if (files) {
-      fetch("http://localhost:8080/v1/images/uploadImage", {
+      fetch(API_URL.UPLOAD_IMAGE, {
         method: "POST",
         headers,
         body: formData,
@@ -37,7 +38,7 @@ const BlogPage = () => {
         .then((data) =>
           setInput({
             ...input,
-            image: `${`http://localhost:8080/`}${data.response.path}`,
+            image: `${`${BACKEND_URL}/`}${data.response.path}`,
           })
         )
         .catch((e) => console.log(e));
@@ -53,7 +54,7 @@ const BlogPage = () => {
     };
     if ((action === "create" && input.title && input.description)) {
       axios
-        .post("http://localhost:8080/v1/blog/create", input, {
+        .post(API_URL.CREATE_BLOG, input, {
           ...defaultOptions,
         })
         .then((response) => {
@@ -66,7 +67,7 @@ const BlogPage = () => {
     }
     else if(action==="update" && input.title && input.description){
       axios
-        .put(`http://localhost:8080/v1/blog/update/${input._id}`, input, {
+        .put(`${API_URL.UPDATE_BLOG}/${input._id}`, input, {
           ...defaultOptions,
         })
         .then((response) => {
@@ -97,7 +98,7 @@ const BlogPage = () => {
       },
     };
     axios
-      .delete(`http://localhost:8080/v1/blog/delete/${id}`, {
+      .delete(`${API_URL.DELETE_BLOG}/${id}`, {
         ...defaultOptions,
       })
       .then((response) => {
@@ -111,7 +112,7 @@ const BlogPage = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:8080/v1/blog/allblogs", {
+      .get(API_URL.GET_ALL_BLOG, {
         headers: { Authorization: `Bearer ${parsedToken}` },
       })
       .then((response) => {

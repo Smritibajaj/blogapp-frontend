@@ -1,5 +1,7 @@
 import axios from "axios";
 import React, { useState } from "react";
+import { API_URL } from "../constants/apiUrl";
+import { useNavigate } from "react-router-dom";
 
 export default function Register() {
   const [input, setInput] = useState({
@@ -7,6 +9,7 @@ export default function Register() {
     password: "",
     userName: "",
   });
+  const navigate = useNavigate();
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -16,7 +19,9 @@ export default function Register() {
   const handleSubmit = (e) =>{
     e.preventDefault();
     if(input.email && input.password && input.userName){
-      axios.post('http://localhost:8080/v1/auth/signup', input).then(response => localStorage.setItem('token',JSON.stringify(response.data.response.token))).catch(e=> console.log(e))
+      axios.post(API_URL.SIGNUP, input).then(response => {localStorage.setItem('token',JSON.stringify(response.data.response.token))
+    navigate("/blogs", { replace: true })
+    }).catch(e=> console.log(e))
     }
   }
   return (

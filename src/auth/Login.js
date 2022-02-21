@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { API_URL } from "../constants/apiUrl";
+import { useNavigate } from "react-router-dom";
 
 export default function Login() {
   const [input, setInput] = useState({
@@ -11,13 +13,16 @@ export default function Login() {
     const { name, value } = e.target;
     setInput({ ...input, [name]: value });
   };
+  const navigate = useNavigate();
 
   const handleSubmit = (e) =>{
     e.preventDefault();
     if(input.email && input.password){
-      axios.post('http://localhost:8080/v1/auth/signin', input).then(response => {
+      axios.post(API_URL.LOGIN, input).then(response => {
       console.log(response.data.response.token)  
-      localStorage.setItem('token',JSON.stringify(response.data.response.token))}).catch(e=> console.log(e))
+      localStorage.setItem('token',JSON.stringify(response.data.response.token))
+      navigate("/blogs", { replace: true })
+    }).catch(e=> console.log(e))
     }
   }
   return (

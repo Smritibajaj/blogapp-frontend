@@ -12,6 +12,7 @@ import {
   useNavigate,
 } from "react-router-dom";
 import axios from "axios";
+import { API_URL } from "./constants/apiUrl";
 
 function RequireAuth({ children }) {
   let token = localStorage.getItem("token");
@@ -22,7 +23,7 @@ function RequireAuth({ children }) {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:8080/v1/user/me`, {
+      .get(API_URL.GET_USER, {
         headers: { Authorization: `Bearer ${parsedToken}` },
       })
       .then(() => setLoading(false))
